@@ -1,7 +1,7 @@
 
 # Borderlands 3 Save Editor
 
-#Updated 30th March 2024,
+# Updated 30th March 2024,
 LootLemon database updated, fixed missing anointment descriptions. 
 
 A tool to help you modify your Borderlands 3 Saves and Profiles.
