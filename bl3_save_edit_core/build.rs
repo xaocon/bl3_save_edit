@@ -55,20 +55,6 @@ fn main() {
 
     let lootlemon_items = "resources/LOOTLEMON_BL3_ITEMS.csv";
 
-    for input in proto_inputs {
-        println!("cargo:rerun-if-changed={}", input);
-    }
-
-    for input in &game_data_inputs_kv {
-        println!("cargo:rerun-if-changed={}", input);
-    }
-
-    for input in &game_data_inputs_array {
-        println!("cargo:rerun-if-changed={}", input);
-    }
-
-    println!("cargo:rerun-if-changed={}", lootlemon_items);
-
     let mut all_game_data_inputs = Vec::new();
 
     for gd in &game_data_inputs_kv {
@@ -95,11 +81,7 @@ fn main() {
     //Compression of resources
     let files_to_compress = ["resources/INVENTORY_SERIAL_DB.json"];
 
-    for file in files_to_compress {
-        println!("cargo:rerun-if-changed={}", file);
-    }
-
-    for file in files_to_compress {
+    for file in &files_to_compress {
         let mut input_file = std::fs::OpenOptions::new().read(true).open(file).unwrap();
         let output_file = std::fs::OpenOptions::new()
             .create(true)
@@ -114,18 +96,10 @@ fn main() {
     }
 
     let inventory_parts_all_filename = "resources/INVENTORY_PARTS_ALL.csv";
-
-    println!("cargo:rerun-if-changed={}", inventory_parts_all_filename);
-
     let inventory_parts_info_all_filename = "resources/INVENTORY_PARTS_INFO_ALL.csv";
 
-    println!(
-        "cargo:rerun-if-changed={}",
-        inventory_parts_info_all_filename
-    );
-
     let inventory_parts_info_all = load_inventory_parts_info_all(inventory_parts_info_all_filename);
-
+    
     //Generate RON resources
     let inventory_serial_db_json = load_inventory_serial_db_json();
 
@@ -443,12 +417,18 @@ fn load_inventory_parts_info_all(filename: &str) -> Vec<ResourcePartInfoRecord> 
         .from_path(filename)
         .unwrap();
 
-    rdr.deserialize()
-        .map(|r| {
-            let record: ResourcePartInfoRecord = r.unwrap();
-            record
-        })
-        .collect::<Vec<_>>()
+rdr.deserialize()
+    .filter_map(|r| {
+        match r {
+            Ok(record) => Some(record),
+            Err(e) => {
+                eprintln!("Error deserializing record: {}", e);
+                None // Skip this record
+            }
+        }
+    })
+    .collect::<Vec<_>>()
+
 }
 
 pub fn load_inventory_serial_db_json() -> JsonValue {
