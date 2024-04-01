@@ -13,7 +13,7 @@ converting between them).
 
 # How to use
 
-Visit [Releases](https://github.com/ZakisM/bl3_save_edit/releases) and download the corresponding version for your
+Visit [Releases](https://github.com/Sigaints/bl3_save_edit/releases/) and download the corresponding version for your
 platform.
 
 Unzip and open the editor, then double click to run it. On the first start it will ask you to point it to the
