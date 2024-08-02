@@ -1,3 +1,4 @@
+#![allow(warnings)] // TODO: remove this
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::env;
@@ -32,7 +33,7 @@ fn main() -> Result<()> {
 
     env::set_var("RUST_LOG", "INFO");
 
-    let config = Bl3Config::load();
+    let config = Bl3Config::load()?;
 
     let logs_dir = config.config_dir().join("logs");
     let backups_dir = config.config_dir().join("backups");

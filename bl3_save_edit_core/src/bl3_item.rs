@@ -23,6 +23,7 @@ pub const MAX_BL3_ITEM_PARTS: usize = 63;
 pub const MAX_BL3_ITEM_ANOINTMENTS: usize = 15;
 
 bitflags! {
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord)]
     pub struct ItemFlags: i32 {
         const SEEN = 0x1;
         const FAVORITE = 0x2;
@@ -764,7 +765,7 @@ impl Bl3Item {
         self.inv_data_bits = serial_db.get_num_bits("InventoryData", self.data_version)?;
         self.manufacturer_bits = serial_db.get_num_bits("ManufacturerData", self.data_version)?;
 
-        let mut new_serial_bits = ArbitraryBitVec::<Lsb0, u8>::new();
+        let mut new_serial_bits = ArbitraryBitVec::<u8, Lsb0>::new();
 
         // Header
         new_serial_bits.append_le(128, 8);

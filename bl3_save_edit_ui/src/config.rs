@@ -1,4 +1,5 @@
 use std::path::PathBuf;
+use std::str;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
@@ -44,32 +45,31 @@ fn default_backup_dir() -> PathBuf {
 }
 
 impl Bl3Config {
-    pub fn load() -> Self {
+    pub fn load() -> Result<Self> {
         let config_dir = dirs::config_dir().unwrap_or_default().join(CONFIG_DIR);
         let backup_dir = dirs::config_dir()
             .unwrap_or_default()
             .join(CONFIG_DIR)
             .join(BACKUP_DIR);
 
-        if let Ok(mut config) = std::fs::read(&config_dir.join(CONFIG_NAME))
-            .map_err(anyhow::Error::new)
-            .and_then(|c| toml::from_slice::<Bl3Config>(&c).map_err(anyhow::Error::new))
-        {
+        if let Ok(mut config) = toml::from_str::<Bl3Config>(str::from_utf8(&std::fs::read(
+            &config_dir.join(CONFIG_NAME),
+        )?)?) {
             info!("Found existing config");
 
-            //Set the config dir in case we ever want to change it from code
+            // Set the config dir in case we ever want to change it from code
             config.config_dir = config_dir;
 
-            config
+            Ok(config)
         } else {
             info!("Creating default config");
 
-            Self {
+            Ok(Self {
                 config_dir,
                 backup_dir,
                 saves_dir: Default::default(),
                 ui_scale_factor: default_scale_factor(),
-            }
+            })
         }
     }
 
@@ -82,7 +82,7 @@ impl Bl3Config {
             tokio::fs::create_dir_all(&config_dir).await?;
         }
 
-        let output = toml::to_vec(&self)?;
+        let output = toml::to_string(&self)?;
 
         let mut config_file = tokio::fs::OpenOptions::new()
             .write(true)
@@ -91,7 +91,7 @@ impl Bl3Config {
             .open(config_dir.join(CONFIG_NAME))
             .await?;
 
-        config_file.write_all(&output).await?;
+        config_file.write_all(&output.as_bytes()).await?;
 
         Ok(())
     }

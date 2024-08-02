@@ -1,3 +1,4 @@
+#![allow(warnings)] // TODO: remove this
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::Write as Write2;
 use std::fs::OpenOptions;
@@ -99,7 +100,7 @@ fn main() {
     let inventory_parts_info_all_filename = "resources/INVENTORY_PARTS_INFO_ALL.csv";
 
     let inventory_parts_info_all = load_inventory_parts_info_all(inventory_parts_info_all_filename);
-    
+
     //Generate RON resources
     let inventory_serial_db_json = load_inventory_serial_db_json();
 
@@ -417,18 +418,17 @@ fn load_inventory_parts_info_all(filename: &str) -> Vec<ResourcePartInfoRecord> 
         .from_path(filename)
         .unwrap();
 
-rdr.deserialize()
-    .filter_map(|r| {
-        match r {
-            Ok(record) => Some(record),
-            Err(e) => {
-                eprintln!("Error deserializing record: {}", e);
-                None // Skip this record
+    rdr.deserialize()
+        .filter_map(|r| {
+            match r {
+                Ok(record) => Some(record),
+                Err(e) => {
+                    eprintln!("Error deserializing record: {}", e);
+                    None // Skip this record
+                }
             }
-        }
-    })
-    .collect::<Vec<_>>()
-
+        })
+        .collect::<Vec<_>>()
 }
 
 pub fn load_inventory_serial_db_json() -> JsonValue {
