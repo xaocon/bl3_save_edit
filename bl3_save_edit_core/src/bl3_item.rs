@@ -10,6 +10,7 @@ use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use serde::Deserialize;
 use strum::{Display, EnumString};
 use tracing::warn;
+use base64::prelude::*;
 
 use crate::arbitrary_bits::{ArbitraryBitVec, ArbitraryBits};
 use crate::game_data::{BALANCE_NAME_MAPPING, BALANCE_TO_INV_KEY};
@@ -446,7 +447,7 @@ impl Bl3Item {
             bail!("Serial must start with 'BL3(' and end with ')'.")
         }
 
-        let decoded = base64::decode(&serial[4..serial.len() - 1])?;
+        let decoded = BASE64_STANDARD.decode(&serial[4..serial.len() - 1])?;
 
         Self::from_serial_bytes(&decoded, None)
     }
@@ -485,7 +486,7 @@ impl Bl3Item {
     pub fn get_serial_number_base64(&self, orig_seed: bool) -> Result<String> {
         let serial = self.get_serial_number(orig_seed)?;
 
-        let encoded = base64::encode(serial);
+        let encoded = BASE64_STANDARD.encode(serial);
 
         let non_latin = format!("BL3({})", encoded);
 

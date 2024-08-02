@@ -1,4 +1,4 @@
-#![allow(dead_code)] // TODO: remove this
+#![allow(dead_code, clippy::all)] // TODO: remove non-clippy
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::Write as Write2;
 use std::fs::OpenOptions;
@@ -557,7 +557,7 @@ fn load_inventory_serial_db_parts_categorized(
                     } else {
                         let curr_group = curr
                             .entry("Unknown Parts".to_owned())
-                            .or_insert_with(BTreeSet::new);
+                            .or_default();
 
                         let inventory_part = ResourcePart {
                             name: inv_db_part_name,

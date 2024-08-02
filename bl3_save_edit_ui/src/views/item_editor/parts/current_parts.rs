@@ -163,6 +163,7 @@ impl CurrentParts {
         &mut self,
         item: &Bl3Item,
         anointments_list: &[ResourceCategorizedParts],
+        #[allow(unused_variables)] // TODO: remove if unneeded
         specific_parts_list: Option<&Vec<ResourceCategorizedParts>>,
         all_parts_list: Option<&Vec<ResourceCategorizedParts>>,
         interaction_message: F,
