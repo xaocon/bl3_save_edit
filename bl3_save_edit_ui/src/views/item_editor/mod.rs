@@ -1208,7 +1208,7 @@ where
             {
                 curr = curr.push(
                     Container::new(
-                        Text::new(format!("{}s", item_type.to_string()))
+                        Text::new(format!("{}s", item_type))
                             .font(JETBRAINS_MONO_BOLD)
                             .size(18)
                             .color(Color::from_rgb8(242, 203, 5)),
@@ -1308,7 +1308,7 @@ where
                         {
                             curr = curr.push(
                                 Container::new(
-                                    Text::new(format!("{}s", item_type.to_string()))
+                                    Text::new(format!("{}s", item_type))
                                         .font(JETBRAINS_MONO_BOLD)
                                         .size(18)
                                         .color(Color::from_rgb8(242, 203, 5)),
@@ -1411,7 +1411,7 @@ pub fn get_filtered_items(
         };
 
         balance_part_to_search
-            .map(|n| n.contains(&search_items_query))
+            .map(|n| n.contains(search_items_query))
             .unwrap_or(false)
             || item
                 .manufacturer_part()
@@ -1420,7 +1420,7 @@ pub fn get_filtered_items(
                 .map(|mp| {
                     mp.to_title_case()
                         .to_lowercase()
-                        .contains(&search_items_query)
+                        .contains(search_items_query)
                 })
                 .unwrap_or(false)
             || "favorite".contains(search_items_query)
@@ -1433,12 +1433,12 @@ pub fn get_filtered_items(
                     .flags
                     .map(|f| f.contains(ItemFlags::JUNK))
                     .unwrap_or(false)
-            || format!("level {}", item.level().to_string()).contains(&search_items_query)
+            || format!("level {}", item.level()).contains(search_items_query)
             || item
                 .item_type
                 .to_string()
                 .to_lowercase()
-                .contains(&search_items_query)
+                .contains(search_items_query)
             || item
                 .item_parts
                 .as_ref()
@@ -1446,11 +1446,11 @@ pub fn get_filtered_items(
                     ip.rarity
                         .to_string()
                         .to_lowercase()
-                        .contains(&search_items_query)
+                        .contains(search_items_query)
                         || ip
                             .weapon_type
                             .as_ref()
-                            .map(|wt| wt.to_string().to_lowercase().contains(&search_items_query))
+                            .map(|wt| wt.to_string().to_lowercase().contains(search_items_query))
                             .unwrap_or(false)
                 })
                 .unwrap_or(false)

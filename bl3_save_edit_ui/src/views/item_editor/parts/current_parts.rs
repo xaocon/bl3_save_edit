@@ -509,9 +509,8 @@ impl CurrentParts {
                         });
 
                     if let Some((category, resource_part)) = resource_part {
-                        let curr_cat_parts = categorized_parts
-                            .entry(category.to_owned())
-                            .or_insert_with(Vec::new);
+                        let curr_cat_parts =
+                            categorized_parts.entry(category.to_owned()).or_default();
 
                         curr_cat_parts.push(Bl3PartWithInfo {
                             part: p.to_owned(),
@@ -520,7 +519,7 @@ impl CurrentParts {
                     } else {
                         let curr_cat_parts = categorized_parts
                             .entry("Unknown Parts".to_owned())
-                            .or_insert_with(Vec::new);
+                            .or_default();
 
                         curr_cat_parts.push(Bl3PartWithInfo {
                             part: p.to_owned(),
@@ -533,7 +532,7 @@ impl CurrentParts {
             item_parts.parts().iter().for_each(|p| {
                 let curr_cat_parts = categorized_parts
                     .entry("Unknown Parts".to_owned())
-                    .or_insert_with(Vec::new);
+                    .or_default();
 
                 curr_cat_parts.push(Bl3PartWithInfo {
                     part: p.to_owned(),
@@ -572,7 +571,7 @@ impl CurrentParts {
             item_parts.generic_parts().iter().for_each(|p| {
                 let curr_cat_parts = categorized_parts
                     .entry("Anointment".to_owned())
-                    .or_insert_with(Vec::new);
+                    .or_default();
 
                 //Find extra info about the anointment
                 let resource_part: Option<&ResourcePart> =

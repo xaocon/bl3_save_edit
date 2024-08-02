@@ -219,8 +219,6 @@ pub enum WeaponType {
 
 impl Bl3Item {
     pub fn from_serial_bytes(serial: &[u8], flags: Option<ItemFlags>) -> Result<Self> {
-        let serial = serial;
-
         if serial.len() < 5 {
             bail!("Serial length must be longer than 4 characters.");
         }

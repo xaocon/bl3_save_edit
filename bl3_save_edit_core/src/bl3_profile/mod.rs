@@ -273,7 +273,7 @@ mod tests {
     fn test_from_data_pc_1() {
         let filename = Path::new("./test_files/1prof.sav");
 
-        let mut profile_file_data = fs::read(&filename).expect("failed to read test_file");
+        let mut profile_file_data = fs::read(filename).expect("failed to read test_file");
 
         let bl3_profile =
             Bl3Profile::from_bytes(filename, &mut profile_file_data, HeaderType::PcProfile)
@@ -331,7 +331,7 @@ mod tests {
     fn test_from_data_pc_2() {
         let filename = Path::new("./test_files/profile.sav");
 
-        let mut profile_file_data = fs::read(&filename).expect("failed to read test_file");
+        let mut profile_file_data = fs::read(filename).expect("failed to read test_file");
 
         let bl3_profile =
             Bl3Profile::from_bytes(filename, &mut profile_file_data, HeaderType::PcProfile)
@@ -389,7 +389,7 @@ mod tests {
     fn test_from_data_ps4_1() {
         let filename = Path::new("./test_files/2profps4.sav");
 
-        let mut profile_file_data = fs::read(&filename).expect("failed to read test_file");
+        let mut profile_file_data = fs::read(filename).expect("failed to read test_file");
 
         let bl3_profile =
             Bl3Profile::from_bytes(filename, &mut profile_file_data, HeaderType::Ps4Profile)

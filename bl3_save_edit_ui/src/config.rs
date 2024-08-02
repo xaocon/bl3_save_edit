@@ -53,7 +53,7 @@ impl Bl3Config {
             .join(BACKUP_DIR);
 
         if let Ok(mut config) = toml::from_str::<Bl3Config>(str::from_utf8(&std::fs::read(
-            &config_dir.join(CONFIG_NAME),
+            config_dir.join(CONFIG_NAME),
         )?)?) {
             info!("Found existing config");
 
@@ -91,7 +91,7 @@ impl Bl3Config {
             .open(config_dir.join(CONFIG_NAME))
             .await?;
 
-        config_file.write_all(&output.as_bytes()).await?;
+        config_file.write_all(output.as_bytes()).await?;
 
         Ok(())
     }

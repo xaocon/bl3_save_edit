@@ -85,12 +85,10 @@ impl InventorySerialDb {
 
         let part_info = self.data[category]["assets"]
             .members()
-            .into_iter()
             .enumerate()
             .par_bridge()
             .map(|(i, p)| (i, p.to_string()))
-            .find_first(|(_, p)| p.to_lowercase().contains(&name_with_stop))
-            .map(|(i, p)| (i, p));
+            .find_first(|(_, p)| p.to_lowercase().contains(&name_with_stop));
 
         if let Some((idx, ident)) = part_info {
             let res = Bl3Part {

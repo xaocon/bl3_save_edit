@@ -207,7 +207,7 @@ impl CharacterData {
                 let unlocked = character
                     .challenge_data
                     .par_iter()
-                    .find_first(|cd| cd.challenge_class_path.contains(&chall_path))
+                    .find_first(|cd| cd.challenge_class_path.contains(chall_path))
                     .map(|cd| cd.currently_completed)
                     .context("failed to read challenge milestones")?;
 
@@ -257,7 +257,6 @@ impl CharacterData {
         let mut cyclone_skins = 0;
 
         character.vehicle_parts_unlocked.iter().for_each(|vp| {
-            let vp = vp;
             let vp = &vp.as_str();
 
             match vp {
@@ -722,12 +721,7 @@ impl CharacterData {
             .equipped_inventory_list
             .iter_mut()
             .find(|s| s.slot_data_path == slot_path)
-            .with_context(|| {
-                format!(
-                    "failed to find inventory slot: {}",
-                    inventory_slot.to_string()
-                )
-            })?;
+            .with_context(|| format!("failed to find inventory slot: {}", inventory_slot))?;
 
         //Unlock in character data
         slot.enabled = true;
@@ -813,7 +807,7 @@ impl CharacterData {
             .resource_pools
             .iter_mut()
             .find(|rp| rp.resource_path == pool_path)
-            .with_context(|| format!("failed to find ammo pool: {}", ammo_pool.to_string()))?;
+            .with_context(|| format!("failed to find ammo pool: {}", ammo_pool))?;
 
         pool.amount = amount as f32;
 

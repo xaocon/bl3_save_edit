@@ -112,7 +112,7 @@ impl<T> MessageResult<T> {
 impl ErrorExt for MessageResult<()> {
     fn handle_ui_error(&self, message: &str, notification: &mut Option<Notification>) {
         if let MessageResult::Error(e) = self {
-            let message = format!("{}: {}.", message, e.to_string());
+            let message = format!("{}: {}.", message, e);
 
             error!("{}", message);
 
@@ -388,7 +388,7 @@ impl Application for Bl3Application {
                                         character_state.experience_points_input = xp_points;
                                     }
                                     SaveCharacterInteractionMessage::ExperiencePoints(xp) => {
-                                        let level = experience_to_level(xp as i32).unwrap_or(1);
+                                        let level = experience_to_level(xp).unwrap_or(1);
 
                                         let character_state = &mut self
                                             .manage_save_state
@@ -1396,7 +1396,7 @@ impl Application for Bl3Application {
 
                         self.loaded_files_selected = Box::new(
                             self.loaded_files
-                                .get(0)
+                                .first()
                                 .expect("loaded_files was empty")
                                 .clone(),
                         );
@@ -1526,7 +1526,7 @@ impl Application for Bl3Application {
                         } else {
                             self.loaded_files_selected = Box::new(
                                 self.loaded_files
-                                    .get(0)
+                                    .first()
                                     .expect("loaded_files was empty")
                                     .clone(),
                             );

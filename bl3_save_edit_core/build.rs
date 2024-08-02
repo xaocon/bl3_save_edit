@@ -476,7 +476,7 @@ fn inventory_parts_all_records(
         .map(|mut record| {
             if let Some(curr_dependencies) = &record.dependencies {
                 let all_dependencies = curr_dependencies
-                    .get(0)
+                    .first()
                     .expect("failed to read curr_dependency")
                     .split(',')
                     .map(|s| s.trim().to_owned())
@@ -487,7 +487,7 @@ fn inventory_parts_all_records(
 
             if let Some(curr_excluders) = &record.excluders {
                 let all_excluders = curr_excluders
-                    .get(0)
+                    .first()
                     .expect("failed to read curr_excluder")
                     .split(',')
                     .map(|s| s.trim().to_owned())
@@ -508,8 +508,6 @@ fn load_inventory_serial_db_parts_categorized(
     records: &[ResourceItemRecord],
     inventory_parts_info_all: &[ResourcePartInfoRecord],
 ) -> HashMap<String, Vec<ResourceCategorizedParts>> {
-    let records = records;
-
     inventory_serial_db
         .entries()
         .par_bridge()
@@ -764,7 +762,6 @@ pub fn gen_lootlemon_items(input_name: &str) -> Vec<LootlemonItem> {
         .unwrap();
 
     rdr.records()
-        .into_iter()
         .map(|r| LootlemonItem::from_record(r.unwrap()))
         .collect()
 }
