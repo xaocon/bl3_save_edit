@@ -1,11 +1,11 @@
-#![allow(warnings)] // TODO: remove this
+#![allow(dead_code)] // TODO: remove this
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::Write as Write2;
 use std::fs::OpenOptions;
 use std::io::{Read, Write};
 
 use csv::StringRecord;
-use heck::TitleCase;
+use heck::ToTitleCase;
 use json::JsonValue;
 use protobuf_codegen_pure::{Codegen, Customize};
 use rayon::iter::{

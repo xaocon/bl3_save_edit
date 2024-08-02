@@ -1,4 +1,4 @@
-#![allow(warnings)] // TODO: remove this
+#![allow(dead_code)] // TODO: remove this
 pub mod arbitrary_bits;
 pub mod bl3_item;
 pub mod bl3_profile;

@@ -1,4 +1,4 @@
-#![allow(warnings)] // TODO: remove this
+#![allow(dead_code)] // TODO: remove this
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::env;

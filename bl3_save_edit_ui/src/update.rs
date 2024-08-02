@@ -4,7 +4,7 @@ use anyhow::{bail, Context, Result};
 use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::{Client, ClientBuilder};
 use retry::delay::Fibonacci;
-use retry::{retry, Error as RetryError, OperationResult};
+use retry::{retry, OperationResult};
 use serde::Deserialize;
 use tracing::{error, info};
 use version_compare::Version;
@@ -81,14 +81,16 @@ impl Release {
 
                 for i in 0..archive.len() {
                     if let Ok(mut file) = archive.by_index(i) {
-                        if let Some(name) = file.enclosed_name().and_then(|n| n.file_name()) {
-                            if name == ASSET {
-                                let mut new_release_executable_file =
-                                    std::fs::File::create(new_release_executable_path)?;
+                        if let Some(enclosed_path) = file.enclosed_name() {
+                            if let Some(name) = enclosed_path.file_name() {
+                                if name == ASSET {
+                                    let mut new_release_executable_file =
+                                        std::fs::File::create(new_release_executable_path)?;
 
-                                std::io::copy(&mut file, &mut new_release_executable_file)?;
+                                    std::io::copy(&mut file, &mut new_release_executable_file)?;
 
-                                return Ok(true);
+                                    return Ok(true);
+                                }
                             }
                         }
                     }
@@ -282,10 +284,7 @@ where
             },
         },
     )
-    .map_err(|e| match e {
-        RetryError::Operation { error, .. } => error,
-        RetryError::Internal(message) => std::io::Error::new(std::io::ErrorKind::Other, message),
-    })
+    .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e.error))
 }
 
 pub fn remove_file<P>(path: P) -> std::io::Result<()>
@@ -314,8 +313,5 @@ where
             }
         },
     )
-    .map_err(|e| match e {
-        RetryError::Operation { error, .. } => error,
-        RetryError::Internal(message) => std::io::Error::new(std::io::ErrorKind::Other, message),
-    })
+    .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e.error))
 }
